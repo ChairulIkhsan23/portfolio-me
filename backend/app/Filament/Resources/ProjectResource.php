@@ -97,6 +97,7 @@ class ProjectResource extends Resource
                             ->schema([
                                 FileUpload::make('image')
                                     ->image()
+                                    ->disk('public')
                                     ->directory('projects')
                                     ->required()
                                     ->imagePreviewHeight('150')
@@ -105,6 +106,7 @@ class ProjectResource extends Resource
                                 
                                 FileUpload::make('images')
                                     ->image()
+                                    ->disk('public')
                                     ->multiple()
                                     ->directory('projects/gallery')
                                     ->imagePreviewHeight('100')

@@ -13,13 +13,18 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->api(prepend: [
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            // \App\Http\Middleware\CorsMiddleware::class,
         ]);
 
-        $middleware->validateCsrfTokens(except: [
-            'api/*',
-            'sanctum/csrf-cookie',
-        ]);
+        // $middleware->validateCsrfTokens(except: [
+        //     'api/*',
+        //     'sanctum/csrf-cookie',
+        // ]);
+
+        $middleware->trustProxies(at: '*');
+
+        $middleware->append(\Illuminate\Http\Middleware\HandleCors::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

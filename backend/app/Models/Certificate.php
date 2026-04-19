@@ -78,4 +78,17 @@ class Certificate extends Model
             ->orWhere('expiry_date', '>', now());
         });
     }
+
+    // Accesor label
+    protected $appends = ['category_label', 'category_name'];
+
+    public function getCategoryLabelAttribute(): string
+    {
+        return $this->category?->label() ?? $this->category ?? '';
+    }
+
+    public function getCategoryNameAttribute(): string
+    {
+        return $this->category_label;
+    }
 }
