@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Skill;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -70,5 +71,24 @@ class Experience extends Model
     public function scopeCurrent($query)
     {
         return $query->where('is_current', true);
+    }
+
+    // Accessor label technologies
+    protected $appends = ['technologies_label'];
+
+    public function getTechnologiesLabelAttribute()
+    {
+        $technologies = $this->technologies;
+        if (is_string($technologies)) {
+            $technologies = json_decode($technologies, true);
+        }
+        if (!is_array($technologies)) {
+            return [];
+        }
+        
+        return array_map(function ($tech) {
+            $enum = Skill::tryFrom($tech);
+            return $enum?->label() ?? $tech;
+        }, $technologies);
     }
 }

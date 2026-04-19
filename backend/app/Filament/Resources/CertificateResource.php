@@ -80,14 +80,16 @@ class CertificateResource extends Resource
                 // Section 3: Media
                 Section::make('Certificate Media')
                     ->icon('heroicon-o-photo')
-                    ->description('Upload certificate image and related media')
+                    ->description('Upload certificate image or PDF file')
                     ->schema([
                         FileUpload::make('image')
-                            ->image()
+                            ->label('Certificate File')
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'])
                             ->directory('certificates')
                             ->imagePreviewHeight('200')
                             ->loadingIndicatorPosition('left')
-                            ->maxSize(2048),
+                            ->maxSize(5120) // 5MB
+                            ->helperText('Upload image (JPG, PNG) or PDF file'),
                     ]),
                 
                 // Section 4: Dates

@@ -4,25 +4,50 @@ namespace App\Repositories;
 
 use App\Models\Experience;
 use App\Contracts\Repositories\ExperienceRepositoryInterface;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ExperienceRepository implements ExperienceRepositoryInterface
 {
-    public function getAll(array $filters = []): \Illuminate\Pagination\LengthAwarePaginator
+    public function getAll(array $filters = []): LengthAwarePaginator
     {
-        $query = Experience::select([
-            'id', 'company', 'position', 'location', 'company_logo',
-            'description', 'technologies', 'achievements',
-            'start_date', 'end_date', 'is_current', 'sort_order'
-        ])
-        ->orderBy('is_current', 'desc')
-        ->orderBy('start_date', 'desc')
-        ->orderBy('sort_order');
-
-        return $query->paginate($filters['per_page'] ?? 10);
+        return Experience::query()
+            ->select([
+                'id',
+                'company',
+                'position',
+                'location',
+                'company_logo',
+                'description',
+                'technologies',
+                'achievements',
+                'start_date',
+                'end_date',
+                'is_current',
+                'sort_order'
+            ])
+            ->orderByDesc('is_current')
+            ->orderByDesc('start_date')
+            ->orderBy('sort_order')
+            ->paginate($filters['per_page'] ?? 10);
     }
 
-    public function getById(int $id): ?object
+    public function getById(int $id): ?Experience
     {
-        return Experience::find($id);
+        return Experience::query()
+            ->select([
+                'id',
+                'company',
+                'position',
+                'location',
+                'company_logo',
+                'description',
+                'technologies',
+                'achievements',
+                'start_date',
+                'end_date',
+                'is_current',
+                'sort_order'
+            ])
+            ->find($id);
     }
 }
