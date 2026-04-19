@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Enums\Skill;
 use App\Enums\ProjectCategory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Storage;
 
 class Project extends Model
 {
@@ -64,5 +66,30 @@ class Project extends Model
     public function scopeByCategory($query, $category)
     {
         return $query->where('category', $category);
+    }
+
+    // Accessor untuk mendapatkan URL gambar utama
+    public function getImageUrlAttribute()
+    {
+        return Storage::url($this->image);
+    }
+
+        // Accessor label technologies
+    protected $appends = ['technologies_label'];
+
+    public function getTechnologiesLabelAttribute()
+    {
+        $technologies = $this->technologies;
+        if (is_string($technologies)) {
+            $technologies = json_decode($technologies, true);
+        }
+        if (!is_array($technologies)) {
+            return [];
+        }
+        
+        return array_map(function ($tech) {
+            $enum = Skill::tryFrom($tech);
+            return $enum?->label() ?? $tech;
+        }, $technologies);
     }
 }

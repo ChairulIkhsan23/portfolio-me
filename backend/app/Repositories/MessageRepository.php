@@ -4,56 +4,59 @@ namespace App\Repositories;
 
 use App\Models\Message;
 use App\Contracts\Repositories\MessageRepositoryInterface;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class MessageRepository implements MessageRepositoryInterface
 {
-    public function getAll(array $filters = []): \Illuminate\Pagination\LengthAwarePaginator
+    private function baseQuery()
     {
-        $query = Message::select([
-            'id', 'name', 'email', 'phone', 'subject',
-            'message', 'is_read', 'read_at', 'ip_address', 'created_at'
-        ])
-        ->orderBy('is_read', 'asc')
-        ->orderBy('created_at', 'desc');
-
-        // Filter unread only
-        if (!empty($filters['unread_only'])) {
-            $query->where('is_read', false);
-        }
-
-        return $query->paginate($filters['per_page'] ?? 10);
+        return Message::query()->select([
+            'id',
+            'name',
+            'email',
+            'phone',
+            'subject',
+            'message',
+            'is_read',
+            'read_at',
+            'ip_address',
+            'created_at'
+        ]);
     }
 
-    public function getById(int $id): ?object
+    public function getAll(array $filters = []): LengthAwarePaginator
     {
-        return Message::find($id);
+        return $this->baseQuery()
+            ->when($filters['unread_only'] ?? false, function ($query) {
+                $query->where('is_read', false);
+            })
+            ->orderBy('is_read', 'asc')
+            ->orderByDesc('created_at')
+            ->paginate($filters['per_page'] ?? 10);
     }
 
-    public function store(array $data): object
+    public function getById(int $id): ?Message
+    {
+        return $this->baseQuery()
+            ->where('id', $id)
+            ->first();
+    }
+
+    public function store(array $data): Message
     {
         return Message::create($data);
     }
 
     public function markAsRead(int $id): bool
     {
-        $message = Message::find($id);
-        if (!$message) {
-            return false;
-        }
-        
-        return $message->update([
+        return Message::where('id', $id)->update([
             'is_read' => true,
             'read_at' => now(),
-        ]);
+        ]) > 0;
     }
 
     public function destroy(int $id): bool
     {
-        $message = Message::find($id);
-        if (!$message) {
-            return false;
-        }
-        
-        return $message->delete();
+        return Message::where('id', $id)->delete() > 0;
     }
 }

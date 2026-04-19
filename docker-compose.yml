@@ -12,6 +12,8 @@ services:
       - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      - portfolio-network
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -24,15 +26,26 @@ services:
       - "8080:80"
     depends_on:
       - mysql
+    networks:
+      - portfolio-network
 
   laravel:
-    image: php:8.2-fpm
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: portfolio-laravel
     working_dir: /var/www/html
     volumes:
       - ./backend:/var/www/html
     depends_on:
       - mysql
+      - redis
+    networks:
+      - portfolio-network
+    environment:
+      - APP_ENV=local
+      - HOME=/tmp
+      - XDG_CONFIG_HOME=/tmp
 
   nginx:
     image: nginx:alpine
@@ -44,6 +57,17 @@ services:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - laravel
+    networks:
+      - portfolio-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: portfolio-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - portfolio-network
 
   nextjs:
     image: node:20-alpine
@@ -53,10 +77,19 @@ services:
       - "3000:3000"
     volumes:
       - ./frontend:/app
-      - /app/node_modules
+      - /app/node_modules   # Jangan di-volume, biar tetep di container
     command: sh -c "npm install && npm run dev"
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:8000/api
+      - WATCHPACK_POLLING=true    
+      - CHOKIDAR_USEPOLLING=true 
+      - NEXT_TELEMETRY_DISABLED=1
+    networks:
+      - portfolio-network
 
 volumes:
   mysql_data:
+
+networks:
+  portfolio-network:
+    driver: bridge

@@ -90,7 +90,7 @@ class ExperienceResource extends Resource
                         Grid::make(2)
                             ->schema([
                                 Select::make('technologies')
-                                    ->label('Technologies Used')
+                                    ->label('Technologies and Skills Used')
                                     ->options(Skill::options())
                                     ->multiple()
                                     ->searchable()

@@ -17,6 +17,7 @@ class ExperienceResource extends JsonResource
             'company_logo' => $this->company_logo,
             'description' => $this->description,
             'technologies' => is_string($this->technologies) ? json_decode($this->technologies, true) : $this->technologies,
+            'technologies_label' => $this->technologies_label,
             'achievements' => is_string($this->achievements) ? json_decode($this->achievements, true) : $this->achievements,
             'start_date' => $this->start_date?->format('Y-m-d'),
             'start_year' => $this->start_date?->format('Y'),

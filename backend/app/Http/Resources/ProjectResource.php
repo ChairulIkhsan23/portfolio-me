@@ -19,9 +19,12 @@ class ProjectResource extends JsonResource
             'title' => $this->title,
             'slug' => $this->slug,
             'description' => $this->description,
-            'image' => $this->image,
+            'image' => $this->image && str_starts_with($this->image, 'http')
+                ? $this->image
+                : asset('storage/' . $this->image),
             'category' => $this->category,
             'technologies' => is_string($this->technologies) ? json_decode($this->technologies, true) : $this->technologies,
+            'technologies_label' => $this->technologies_label,
             'completion_date' => $this->completion_date?->format('Y-m-d'),
             'completion_date_formatted' => $this->completion_date?->format('M Y'),
             'github_url' => $this->github_url,

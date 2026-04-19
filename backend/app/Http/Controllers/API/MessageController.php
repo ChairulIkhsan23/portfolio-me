@@ -20,11 +20,11 @@ class MessageController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'phone' => 'nullable|string|max:20',
-            'subject' => 'required|string|max:255',
-            'message' => 'required|string',
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:20'],
+            'subject' => ['required', 'string', 'max:255'],
+            'message' => ['required', 'string'],
         ]);
 
         if ($validator->fails()) {
@@ -34,7 +34,7 @@ class MessageController extends Controller
             ], 422);
         }
 
-        $data = $request->only(['name', 'email', 'phone', 'subject', 'message']);
+        $data = $validator->validated(); 
         $data['ip_address'] = $request->ip();
 
         $message = $this->messageRepository->store($data);

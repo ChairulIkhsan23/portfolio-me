@@ -4,25 +4,48 @@ namespace App\Repositories;
 
 use App\Models\Education;
 use App\Contracts\Repositories\EducationRepositoryInterface;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class EducationRepository implements EducationRepositoryInterface
 {
-    public function getAll(array $filters = []): \Illuminate\Pagination\LengthAwarePaginator
+    public function getAll(array $filters = []): LengthAwarePaginator
     {
-        $query = Education::select([
-            'id', 'institution', 'degree', 'field_of_study',
-            'grade', 'logo', 'start_date', 'end_date',
-            'is_current', 'description', 'sort_order'
-        ])
-        ->orderBy('is_current', 'desc')
-        ->orderBy('start_date', 'desc')
-        ->orderBy('sort_order');
-
-        return $query->paginate($filters['per_page'] ?? 10);
+        return Education::query()
+            ->select([
+                'id',
+                'institution',
+                'degree',
+                'field_of_study',
+                'grade',
+                'logo',
+                'start_date',
+                'end_date',
+                'is_current',
+                'description',
+                'sort_order'
+            ])
+            ->orderByDesc('is_current')
+            ->orderByDesc('start_date')
+            ->orderBy('sort_order')
+            ->paginate($filters['per_page'] ?? 10);
     }
 
-    public function getById(int $id): ?object
+    public function getById(int $id): ?Education
     {
-        return Education::find($id);
+        return Education::query()
+            ->select([
+                'id',
+                'institution',
+                'degree',
+                'field_of_study',
+                'grade',
+                'logo',
+                'start_date',
+                'end_date',
+                'is_current',
+                'description',
+                'sort_order'
+            ])
+            ->find($id);
     }
 }
