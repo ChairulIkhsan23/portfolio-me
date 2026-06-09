@@ -4,15 +4,22 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { Award, ExternalLink } from 'lucide-react';
 import { Certificate } from '@/types';
+import { useImageFallback } from '@/hooks/useImageFallback';
 
 interface CertificateItemProps {
     certificate: Certificate;
     index: number;
 }
 
-
-
 export default function CertificateItem({ certificate, index }: CertificateItemProps) {
+    const {
+        imageSrc,
+        hasError,
+        isLoading,
+        handleError,
+        handleLoad,
+    } = useImageFallback(certificate.image || '');
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -24,23 +31,41 @@ export default function CertificateItem({ certificate, index }: CertificateItemP
             <div className="bg-white/5 rounded-xl overflow-visible hover:bg-white/10 transition-all duration-300 border border-white/10 hover:border-blue-500/30 relative">
                 {/* Image di atas */}
                 {certificate.image ? (
-                    <div className="relative w-full h-48 overflow-hidden bg-white/5">
+                    <div className="relative w-full h-48 overflow-hidden bg-gray-800">
+                        {/* Loading Skeleton */}
+                        {isLoading && (
+                            <div className="absolute inset-0 bg-linear-to-r from-gray-800 via-gray-700 to-gray-800 animate-pulse" />
+                        )}
+
                         <Image
-                            src={certificate.image}
+                            src={imageSrc}
                             alt={certificate.title}
                             fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            className={`object-cover transition-all duration-500 group-hover:scale-105 ${isLoading ? 'opacity-0' : 'opacity-100'
+                                }`}
                             unoptimized={true}
+                            onError={handleError}
+                            onLoad={handleLoad}
                         />
+
+                        {/* Error Indicator */}
+                        {hasError && (
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+                                <div className="text-center">
+                                    <Award size={32} className="text-blue-400 mx-auto mb-1" />
+                                    <p className="text-xs text-gray-300">Image not available</p>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 ) : (
-                    <div className="w-full h-32 bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center">
+                    <div className="w-full h-32 bg-linear-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center">
                         <Award size={48} className="text-blue-400" />
                     </div>
                 )}
 
-                {/* Category Badge - polos tanpa warna per kategori */}
-                <div className="absolute top-4 left-4 z-2   0">
+                {/* Category Badge */}
+                <div className="absolute top-4 left-4 z-10">
                     <span className="text-xs px-3 py-1 rounded-full bg-black/60 backdrop-blur-sm text-white border border-white/20">
                         {certificate.category_label || certificate.category}
                     </span>

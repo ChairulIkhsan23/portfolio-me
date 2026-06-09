@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { FaGithub } from 'react-icons/fa';
 import { FiExternalLink } from 'react-icons/fi';
 import { Project } from '@/types';
+import { useImageFallback } from '@/hooks/useImageFallback';
 
 interface CardProjectProps {
     project: Project;
@@ -14,6 +15,14 @@ interface CardProjectProps {
 }
 
 export default function CardProject({ project, index = 0, onClick }: CardProjectProps) {
+    const {
+        imageSrc,
+        hasError,
+        isLoading,
+        handleError,
+        handleLoad,
+    } = useImageFallback(project.image || '');
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -21,19 +30,28 @@ export default function CardProject({ project, index = 0, onClick }: CardProject
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
             onClick={onClick}
-            className="group relative bg-gradient-to-br from-white/5 to-white/0 rounded-2xl overflow-hidden border border-white/10 hover:border-blue-500/40 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/10 cursor-pointer"
+            className="group relative bg-linear-to-br from-white/5 to-white/0 rounded-2xl overflow-hidden border border-white/10 hover:border-blue-500/40 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/10 cursor-pointer"
         >
             {/* Image */}
-            <div className="relative h-64 overflow-hidden">
+            <div className="relative h-64 overflow-hidden bg-gray-800">
+                {/* Loading Skeleton */}
+                {isLoading && (
+                    <div className="absolute inset-0 bg-linear-to-r from-gray-800 via-gray-700 to-gray-800 animate-pulse" />
+                )}
+
                 <Image
-                    src={project.image}
+                    src={imageSrc}
                     alt={project.title}
                     fill
                     unoptimized={true}
-                    className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                    className={`object-cover transition-all duration-700 ease-out group-hover:scale-110 ${isLoading ? 'opacity-0' : 'opacity-100'
+                        }`}
+                    onError={handleError}
+                    onLoad={handleLoad}
                 />
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+
+                {/* linear overlay */}
+                <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/30 to-transparent" />
 
                 {/* Badge di atas gambar */}
                 <div className="absolute top-4 left-4 flex flex-wrap gap-2 z-10">
@@ -46,6 +64,15 @@ export default function CardProject({ project, index = 0, onClick }: CardProject
                         </span>
                     )}
                 </div>
+
+                {/* Error Indicator */}
+                {hasError && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-10">
+                        <div className="text-center">
+                            <p className="text-xs text-gray-300">Image not available</p>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Content */}
