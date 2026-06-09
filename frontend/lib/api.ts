@@ -1,8 +1,11 @@
 import { MessageForm } from '@/types';
 import axios from 'axios';
 
+// Hybrid: Prioritaskan environment variable, fallback ke hardcode
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://backend-portfolio.chairulikhsanworks.my.id';
+
 const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+    baseURL: API_URL,
     headers: {
         'Content-Type': 'application/json',
     },
