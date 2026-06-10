@@ -1,12 +1,22 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ArrowRightCircle } from 'lucide-react';
+import { ArrowRightCircle, Star } from 'lucide-react';
 import Image from 'next/image';
 import { FaGithub } from 'react-icons/fa';
 import { FiExternalLink } from 'react-icons/fi';
 import { Project } from '@/types';
 import { useImageFallback } from '@/hooks/useImageFallback';
+
+const capitalizeWords = (str: string | null | undefined): string => {
+    if (!str) return '';
+    return str
+        .replace(/-/g, ' ')
+        .replace(/_/g, ' ')
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
+};
 
 interface CardProjectProps {
     project: Project;
@@ -23,6 +33,16 @@ export default function CardProject({ project, index = 0, onClick }: CardProject
         handleLoad,
     } = useImageFallback(project.image || '');
 
+    const formattedCategory = capitalizeWords(project.category);
+
+    const getFormattedTechs = (techs: string[] | undefined): string[] => {
+        if (!techs) return [];
+        return techs.map(tech => capitalizeWords(tech));
+    };
+
+    const rawTechs = project.technologies_label ?? project.technologies;
+    const formattedTechs = getFormattedTechs(rawTechs);
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -36,7 +56,7 @@ export default function CardProject({ project, index = 0, onClick }: CardProject
             <div className="relative h-64 overflow-hidden bg-gray-800">
                 {/* Loading Skeleton */}
                 {isLoading && (
-                    <div className="absolute inset-0 bg-linear-to-r from-gray-800 via-gray-700 to-gray-800 animate-pulse" />
+                    <div className="absolute inset-0 bg-linear-to-r from-gray-800 via-gray-700 to-gray-800 animate-pulse z-0" />
                 )}
 
                 <Image
@@ -50,22 +70,23 @@ export default function CardProject({ project, index = 0, onClick }: CardProject
                     onLoad={handleLoad}
                 />
 
-                {/* linear overlay */}
-                <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/30 to-transparent" />
+                {/* linear overlay - z-index lebih rendah dari badge */}
+                <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/30 to-transparent z-5" />
 
-                {/* Badge di atas gambar */}
-                <div className="absolute top-4 left-4 flex flex-wrap gap-2 z-10">
+                {/* Badge di atas gambar - z-index tinggi */}
+                <div className="absolute top-4 left-4 flex flex-wrap gap-2 z-20">
                     <span className="text-xs px-3 py-1 rounded-full bg-blue-500/80 text-white backdrop-blur-sm border border-white/20">
-                        {project.category.replace(/-/g, ' ')}
+                        {formattedCategory || 'Project'}
                     </span>
                     {project.is_featured && (
-                        <span className="text-xs px-3 py-1 rounded-full bg-lime-400/80 text-white backdrop-blur-sm border border-white/20">
-                            Featured
+                        <span className="flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-lime-500/80 text-white backdrop-blur-sm border border-white/20">
+                            <Star size={12} className="fill-white" />
+                            <span>Featured</span>
                         </span>
                     )}
                 </div>
 
-                {/* Error Indicator */}
+                {/* Error Indicator - di background, tidak menutupi badge */}
                 {hasError && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-10">
                         <div className="text-center">
@@ -85,28 +106,23 @@ export default function CardProject({ project, index = 0, onClick }: CardProject
                     {project.description}
                 </p>
 
-                {/* Technologies */}
-                {(() => {
-                    const techs = project.technologies_label ?? project.technologies;
-                    if (!techs || techs.length === 0) return null;
-                    return (
-                        <div className="flex flex-wrap gap-2 mb-5">
-                            {techs.slice(0, 4).map((tech) => (
-                                <span
-                                    key={tech}
-                                    className="text-xs px-2.5 py-1 rounded-full bg-white/10 text-gray-300 border border-white/5 hover:bg-blue-500/20 hover:text-blue-400 hover:border-blue-500/30 transition-all duration-300"
-                                >
-                                    {tech}
-                                </span>
-                            ))}
-                            {techs.length > 4 && (
-                                <span className="text-xs px-2.5 py-1 rounded-full bg-white/10 text-gray-300 border border-white/5">
-                                    +{techs.length - 4}
-                                </span>
-                            )}
-                        </div>
-                    );
-                })()}
+                {formattedTechs.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-5">
+                        {formattedTechs.slice(0, 4).map((tech) => (
+                            <span
+                                key={tech}
+                                className="text-xs px-2.5 py-1 rounded-full bg-white/10 text-gray-300 border border-white/5 hover:bg-blue-500/20 hover:text-blue-400 hover:border-blue-500/30 transition-all duration-300"
+                            >
+                                {tech}
+                            </span>
+                        ))}
+                        {formattedTechs.length > 4 && (
+                            <span className="text-xs px-2.5 py-1 rounded-full bg-white/10 text-gray-300 border border-white/5">
+                                +{formattedTechs.length - 4}
+                            </span>
+                        )}
+                    </div>
+                )}
 
                 {/* Action Buttons */}
                 <div className="flex items-center gap-4 pt-4 border-t border-white/10">

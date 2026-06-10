@@ -49,7 +49,7 @@ export default function About() {
                                 <div className="absolute inset-0 overflow-hidden rounded-2xl border border-white/20 bg-black/50 shadow-xl [transform:rotateY(180deg)] [backface-visibility:hidden]">
                                     <div className="relative w-full h-full">
                                         <Image
-                                            src="/images/profile-back.jpg"
+                                            src="/images/profile-back-2.jpg"
                                             alt="Chairul Ikhsan - Back"
                                             fill
                                             className="object-cover object-top"

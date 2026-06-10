@@ -1,9 +1,9 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useProjects } from '@/hooks/useProjects';
 import CardProject from '@/components/ui/CardProject';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, FolderOpen, RefreshCw } from 'lucide-react';
 import Modal from '@/components/ui/Modal';
 import { useProject } from '@/hooks/useProject';
@@ -12,14 +12,19 @@ import { FaGithub } from 'react-icons/fa';
 import { FiExternalLink } from 'react-icons/fi';
 import { Skeleton } from '@/components/ui/skeleton';
 
-// Component Skeleton untuk Card
+const capitalizeWords = (str: string | null | undefined): string => {
+    if (!str) return '';
+    return str
+        .replace(/-/g, ' ')
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
+};
+
 function CardSkeleton() {
     return (
         <div className="group relative bg-linear-to-br from-white/5 to-white/0 rounded-2xl overflow-hidden border border-white/10">
-            {/* Image Skeleton */}
             <Skeleton className="h-64 w-full rounded-none" />
-
-            {/* Content Skeleton */}
             <div className="p-6 space-y-4">
                 <Skeleton className="h-7 w-3/4" />
                 <div className="space-y-2">
@@ -42,7 +47,6 @@ function CardSkeleton() {
     );
 }
 
-// Component Empty State
 function EmptyState({ onRetry }: { onRetry?: () => void }) {
     return (
         <motion.div
@@ -88,7 +92,30 @@ export default function Project() {
         setSelectedSlug(null);
     };
 
-    // Loading state dengan skeleton grid
+    const allProjects = projects;
+    const displayProjects = allProjects.slice(0, 12);
+    const totalSlides = Math.ceil(displayProjects.length / projectsPerSlide);
+    const validTotalSlides = Math.max(1, totalSlides);
+
+    const safeCurrentIndex = ((currentIndex % validTotalSlides) + validTotalSlides) % validTotalSlides;
+
+    const currentProjects = displayProjects.slice(
+        safeCurrentIndex * projectsPerSlide,
+        (safeCurrentIndex + 1) * projectsPerSlide
+    );
+
+    const nextSlide = useCallback(() => {
+        setCurrentIndex((prev) => prev + 1);
+    }, []);
+
+    const prevSlide = useCallback(() => {
+        setCurrentIndex((prev) => prev - 1);
+    }, []);
+
+    const goToSlide = (index: number) => {
+        setCurrentIndex(index);
+    };
+
     if (loading) {
         return (
             <section className="py-20 overflow-hidden">
@@ -108,7 +135,8 @@ export default function Project() {
                         </h2>
                     </motion.div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {/* Skeleton grid - sama persis dengan layout card asli */}
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[...Array(6)].map((_, i) => (
                             <CardSkeleton key={i} />
                         ))}
@@ -118,7 +146,6 @@ export default function Project() {
         );
     }
 
-    // Error state (termasuk 404 API not ready)
     if (error) {
         return (
             <section className="py-20">
@@ -129,10 +156,7 @@ export default function Project() {
         );
     }
 
-    const featuredProjects = projects.filter(p => p.is_featured).slice(0, 6);
-
-    // Empty state (filtered projects kosong)
-    if (featuredProjects.length === 0) {
+    if (displayProjects.length === 0) {
         return (
             <section className="py-20">
                 <div className="container mx-auto px-6 md:px-16">
@@ -141,24 +165,6 @@ export default function Project() {
             </section>
         );
     }
-
-    const totalSlides = Math.ceil(featuredProjects.length / projectsPerSlide);
-    const currentProjects = featuredProjects.slice(
-        currentIndex * projectsPerSlide,
-        (currentIndex + 1) * projectsPerSlide
-    );
-
-    const nextSlide = () => {
-        if (currentIndex < totalSlides - 1) {
-            setCurrentIndex(currentIndex + 1);
-        }
-    };
-
-    const prevSlide = () => {
-        if (currentIndex > 0) {
-            setCurrentIndex(currentIndex - 1);
-        }
-    };
 
     return (
         <>
@@ -177,57 +183,60 @@ export default function Project() {
                         <h2 className="text-4xl md:text-5xl font-bold text-white">
                             Projects
                         </h2>
+                        <p className="text-gray-400 mt-2">
+                            {displayProjects.length} projects
+                        </p>
                     </motion.div>
 
                     <div className="relative">
-                        <motion.div
-                            key={currentIndex}
-                            initial={{ opacity: 0, x: 50 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -50 }}
-                            transition={{ duration: 0.5 }}
-                            className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-                        >
-                            {currentProjects.map((project, index) => (
-                                <CardProject
-                                    key={project.id}
-                                    project={project}
-                                    index={index}
-                                    onClick={() => openModal(project.slug)}
-                                />
-                            ))}
-                        </motion.div>
+                        <div className="overflow-hidden">
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={safeCurrentIndex}
+                                    initial={{ opacity: 0, x: 50 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -50 }}
+                                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                                    className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+                                >
+                                    {currentProjects.map((project, index) => (
+                                        <CardProject
+                                            key={project.id}
+                                            project={project}
+                                            index={index}
+                                            onClick={() => openModal(project.slug)}
+                                        />
+                                    ))}
+                                </motion.div>
+                            </AnimatePresence>
+                        </div>
 
-                        {totalSlides > 1 && (
+                        {validTotalSlides > 1 && (
                             <>
                                 <button
                                     onClick={prevSlide}
-                                    disabled={currentIndex === 0}
-                                    className={`absolute left-0 top-1/2 -translate-y-1/2 -ml-4 p-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 transition-all duration-300 ${currentIndex === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110'
-                                        }`}
+                                    className="absolute left-0 top-1/2 -translate-y-1/2 -ml-4 p-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 transition-all duration-300 hover:scale-110 z-10"
                                 >
                                     <ChevronLeft size={24} />
                                 </button>
                                 <button
                                     onClick={nextSlide}
-                                    disabled={currentIndex === totalSlides - 1}
-                                    className={`absolute right-0 top-1/2 -translate-y-1/2 -mr-4 p-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 transition-all duration-300 ${currentIndex === totalSlides - 1 ? 'opacity-50 cursor-not-allowed' : 'hover:scale-110'
-                                        }`}
+                                    className="absolute right-0 top-1/2 -translate-y-1/2 -mr-4 p-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 transition-all duration-300 hover:scale-110 z-10"
                                 >
                                     <ChevronRight size={24} />
                                 </button>
                             </>
                         )}
 
-                        {totalSlides > 1 && (
-                            <div className="flex justify-center gap-2 mt-8">
-                                {Array.from({ length: totalSlides }).map((_, idx) => (
+                        {validTotalSlides > 1 && (
+                            <div className="flex justify-center gap-2 mt-8 flex-wrap">
+                                {Array.from({ length: validTotalSlides }).map((_, idx) => (
                                     <button
                                         key={idx}
-                                        onClick={() => setCurrentIndex(idx)}
-                                        className={`transition-all duration-300 ${currentIndex === idx
+                                        onClick={() => goToSlide(idx)}
+                                        className={`transition-all duration-300 cursor-pointer ${safeCurrentIndex === idx
                                             ? 'w-8 h-2 bg-blue-500 rounded-full'
-                                            : 'w-2 h-2 bg-white/30 rounded-full hover:bg-white/50'
+                                            : 'w-2 h-2 bg-white/30 rounded-full hover:bg-white/50 hover:scale-125'
                                             }`}
                                     />
                                 ))}
@@ -237,7 +246,6 @@ export default function Project() {
                 </div>
             </section>
 
-            {/* Modal Detail Project */}
             <Modal isOpen={!!selectedSlug} onClose={closeModal}>
                 {selectedProject && (
                     <div>
@@ -255,15 +263,15 @@ export default function Project() {
                             <h2 className="text-2xl md:text-3xl font-bold text-white">
                                 {selectedProject.title}
                             </h2>
-                            <span className="text-xs px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 capitalize">
-                                {selectedProject.category?.replace(/-/g, ' ') || 'Project'}
+                            <span className="text-xs px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                                {capitalizeWords(selectedProject.category) || 'Project'}
                             </span>
                         </div>
 
                         <div className="flex flex-wrap gap-2 mb-6">
-                            {(selectedProject.technologies || []).map((tech) => (
+                            {(selectedProject.technologies || []).map((tech: string) => (
                                 <span key={tech} className="text-xs px-2.5 py-1 rounded-full bg-white/10 text-gray-300 border border-white/5">
-                                    {tech}
+                                    {capitalizeWords(tech)}
                                 </span>
                             ))}
                         </div>

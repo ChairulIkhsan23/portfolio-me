@@ -52,7 +52,6 @@ export default function CertificateItem({ certificate, index }: CertificateItemP
                         {hasError && (
                             <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm">
                                 <div className="text-center">
-                                    <Award size={32} className="text-blue-400 mx-auto mb-1" />
                                     <p className="text-xs text-gray-300">Image not available</p>
                                 </div>
                             </div>

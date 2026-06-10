@@ -151,7 +151,7 @@ export default function Certificates() {
                         Certifications
                     </h2>
                     <p className="text-gray-400 text-base max-w-2xl mx-auto">
-                        Professional certifications and achievements
+                        Professional Certifications and Achievements
                     </p>
                 </motion.div>
 
