@@ -38,6 +38,7 @@ export default function About() {
                                             alt="Chairul Ikhsan"
                                             fill
                                             className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                             quality={100}
                                             priority
                                         />
@@ -53,6 +54,7 @@ export default function About() {
                                             alt="Chairul Ikhsan - Back"
                                             fill
                                             className="object-cover object-top"
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                             quality={100}
                                         />
                                         <div className="absolute inset-0 bg-black/20" />

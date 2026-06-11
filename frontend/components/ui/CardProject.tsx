@@ -52,9 +52,7 @@ export default function CardProject({ project, index = 0, onClick }: CardProject
             onClick={onClick}
             className="group relative bg-linear-to-br from-white/5 to-white/0 rounded-2xl overflow-hidden border border-white/10 hover:border-blue-500/40 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/10 cursor-pointer"
         >
-            {/* Image */}
             <div className="relative h-64 overflow-hidden bg-gray-800">
-                {/* Loading Skeleton */}
                 {isLoading && (
                     <div className="absolute inset-0 bg-linear-to-r from-gray-800 via-gray-700 to-gray-800 animate-pulse z-0" />
                 )}
@@ -70,10 +68,8 @@ export default function CardProject({ project, index = 0, onClick }: CardProject
                     onLoad={handleLoad}
                 />
 
-                {/* linear overlay - z-index lebih rendah dari badge */}
                 <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/30 to-transparent z-5" />
 
-                {/* Badge di atas gambar - z-index tinggi */}
                 <div className="absolute top-4 left-4 flex flex-wrap gap-2 z-20">
                     <span className="text-xs px-3 py-1 rounded-full bg-blue-500/80 text-white backdrop-blur-sm border border-white/20">
                         {formattedCategory || 'Project'}
@@ -86,7 +82,6 @@ export default function CardProject({ project, index = 0, onClick }: CardProject
                     )}
                 </div>
 
-                {/* Error Indicator - di background, tidak menutupi badge */}
                 {hasError && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-10">
                         <div className="text-center">
@@ -96,13 +91,12 @@ export default function CardProject({ project, index = 0, onClick }: CardProject
                 )}
             </div>
 
-            {/* Content */}
             <div className="p-6">
                 <h3 className="text-2xl font-bold mb-3 group-hover:text-blue-400 transition-colors duration-300">
                     {project.title}
                 </h3>
 
-                <p className="text-gray-300 text-sm leading-relaxed line-clamp-3 mb-4">
+                <p className="text-gray-300 text-sm leading-relaxed line-clamp-3 mb-4 whitespace-pre-wrap">
                     {project.description}
                 </p>
 
@@ -124,7 +118,6 @@ export default function CardProject({ project, index = 0, onClick }: CardProject
                     </div>
                 )}
 
-                {/* Action Buttons */}
                 <div className="flex items-center gap-4 pt-4 border-t border-white/10">
                     {project.github_url && (
                         <a

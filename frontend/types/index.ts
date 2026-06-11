@@ -3,6 +3,7 @@ export interface Project {
     title: string;
     slug: string;
     description: string;
+    highlights?: string[];
     content?: string;
     image: string;
     images?: string[];
@@ -23,6 +24,7 @@ export interface Experience {
     location?: string;
     company_logo?: string;
     description: string;
+    highlights?: string[];
     technologies?: string[];
     technologies_label?: string[];
     achievements?: string[];
@@ -43,6 +45,7 @@ export interface Education {
     end_date?: string;
     is_current: boolean;
     description?: string;
+    highlights?: string[];
     duration: string;
 }
 

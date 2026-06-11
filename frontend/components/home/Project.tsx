@@ -135,7 +135,6 @@ export default function Project() {
                         </h2>
                     </motion.div>
 
-                    {/* Skeleton grid - sama persis dengan layout card asli */}
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {[...Array(6)].map((_, i) => (
                             <CardSkeleton key={i} />
@@ -248,8 +247,8 @@ export default function Project() {
 
             <Modal isOpen={!!selectedSlug} onClose={closeModal}>
                 {selectedProject && (
-                    <div>
-                        <div className="relative h-64 md:h-96 rounded-xl overflow-hidden mb-6">
+                    <div className="pb-6">
+                        <div className="relative h-56 md:h-80 lg:h-96 rounded-xl overflow-hidden mb-6">
                             <Image
                                 src={selectedProject.image}
                                 alt={selectedProject.title}
@@ -259,46 +258,67 @@ export default function Project() {
                             />
                         </div>
 
-                        <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
-                            <h2 className="text-2xl md:text-3xl font-bold text-white">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                            <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-white">
                                 {selectedProject.title}
                             </h2>
-                            <span className="text-xs px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                            <span className="text-xs px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 w-fit">
                                 {capitalizeWords(selectedProject.category) || 'Project'}
                             </span>
                         </div>
 
                         <div className="flex flex-wrap gap-2 mb-6">
-                            {(selectedProject.technologies || []).map((tech: string) => (
+                            {(selectedProject.technologies || []).slice(0, 6).map((tech: string) => (
                                 <span key={tech} className="text-xs px-2.5 py-1 rounded-full bg-white/10 text-gray-300 border border-white/5">
                                     {capitalizeWords(tech)}
                                 </span>
                             ))}
-                        </div>
-
-                        <div className="prose prose-invert max-w-none mb-6">
-                            <p className="text-gray-300 leading-relaxed">
-                                {selectedProject.description}
-                            </p>
-                            {selectedProject.content && (
-                                <div className="mt-4 text-gray-400" dangerouslySetInnerHTML={{ __html: selectedProject.content }} />
+                            {(selectedProject.technologies || []).length > 6 && (
+                                <span className="text-xs px-2.5 py-1 rounded-full bg-white/10 text-gray-300 border border-white/5">
+                                    +{(selectedProject.technologies || []).length - 6}
+                                </span>
                             )}
                         </div>
 
-                        <div className="text-sm text-gray-500 mb-6">
+                        {selectedProject.highlights && selectedProject.highlights.length > 0 && (
+                            <div className="bg-white/5 rounded-lg p-4 md:p-5 mb-6">
+                                <h3 className="text-base md:text-lg font-semibold text-white mb-3">
+                                    Key Highlights
+                                </h3>
+                                <ul className="space-y-2">
+                                    {selectedProject.highlights.map((highlight: string | { point: string }, idx: number) => (
+                                        <li key={idx} className="text-gray-300 text-sm flex gap-2">
+                                            <span className="text-blue-400 mt-0.5">•</span>
+                                            <span>{typeof highlight === 'object' ? highlight.point : highlight}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+
+                        <div className="prose prose-invert max-w-none mb-6">
+                            <p className="text-gray-300 text-sm md:text-base leading-relaxed">
+                                {selectedProject.description}
+                            </p>
+                            {selectedProject.content && (
+                                <div className="mt-4 text-gray-400 text-sm" dangerouslySetInnerHTML={{ __html: selectedProject.content }} />
+                            )}
+                        </div>
+
+                        <div className="text-xs md:text-sm text-gray-500 mb-6">
                             Completed: {selectedProject.completion_date_formatted}
                         </div>
 
-                        <div className="flex flex-wrap gap-4 pt-6 border-t border-white/10">
+                        <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t border-white/10">
                             {selectedProject.github_url && (
                                 <a
                                     href={selectedProject.github_url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+                                    className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors w-full sm:w-auto"
                                 >
-                                    <FaGithub size={18} />
-                                    <span>View Code</span>
+                                    <FaGithub size={16} />
+                                    <span className="text-sm">View Code</span>
                                 </a>
                             )}
                             {selectedProject.project_url && (
@@ -306,10 +326,10 @@ export default function Project() {
                                     href={selectedProject.project_url}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 transition-colors text-blue-400"
+                                    className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 transition-colors text-blue-400 w-full sm:w-auto"
                                 >
-                                    <FiExternalLink size={18} />
-                                    <span>Live Demo</span>
+                                    <FiExternalLink size={16} />
+                                    <span className="text-sm">Live Demo</span>
                                 </a>
                             )}
                         </div>
