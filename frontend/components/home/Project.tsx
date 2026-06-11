@@ -6,11 +6,11 @@ import CardProject from '@/components/ui/CardProject';
 import { useState, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, FolderOpen, RefreshCw } from 'lucide-react';
 import Modal from '@/components/ui/Modal';
-import { useProject } from '@/hooks/useProject';
 import Image from 'next/image';
 import { FaGithub } from 'react-icons/fa';
 import { FiExternalLink } from 'react-icons/fi';
 import { Skeleton } from '@/components/ui/skeleton';
+import type { Project as ProjectType } from '@/types';
 
 const capitalizeWords = (str: string | null | undefined): string => {
     if (!str) return '';
@@ -77,19 +77,18 @@ function EmptyState({ onRetry }: { onRetry?: () => void }) {
     );
 }
 
-export default function Project() {
+export default function ProjectsPage() {
     const { projects, loading, error } = useProjects();
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
-    const { project: selectedProject } = useProject(selectedSlug || '');
+    const [selectedProject, setSelectedProject] = useState<ProjectType | null>(null);
     const projectsPerSlide = 3;
 
-    const openModal = (slug: string) => {
-        setSelectedSlug(slug);
+    const openModal = (project: ProjectType) => {
+        setSelectedProject(project);
     };
 
     const closeModal = () => {
-        setSelectedSlug(null);
+        setSelectedProject(null);
     };
 
     const allProjects = projects;
@@ -203,7 +202,7 @@ export default function Project() {
                                             key={project.id}
                                             project={project}
                                             index={index}
-                                            onClick={() => openModal(project.slug)}
+                                            onClick={() => openModal(project)}
                                         />
                                     ))}
                                 </motion.div>
@@ -245,7 +244,7 @@ export default function Project() {
                 </div>
             </section>
 
-            <Modal isOpen={!!selectedSlug} onClose={closeModal}>
+            <Modal isOpen={!!selectedProject} onClose={closeModal}>
                 {selectedProject && (
                     <div className="pb-6">
                         <div className="relative h-56 md:h-80 lg:h-96 rounded-xl overflow-hidden mb-6">
