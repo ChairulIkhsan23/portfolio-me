@@ -3,8 +3,6 @@
 import { motion } from 'framer-motion';
 import { ArrowRightCircle, Star } from 'lucide-react';
 import Image from 'next/image';
-import { FaGithub } from 'react-icons/fa';
-import { FiExternalLink } from 'react-icons/fi';
 import { Project } from '@/types';
 import { useImageFallback } from '@/hooks/useImageFallback';
 
@@ -119,30 +117,6 @@ export default function CardProject({ project, index = 0, onClick }: CardProject
                 )}
 
                 <div className="flex items-center gap-4 pt-4 border-t border-white/10">
-                    {project.github_url && (
-                        <a
-                            href={project.github_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors duration-300"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <FaGithub size={16} />
-                            <span>Code</span>
-                        </a>
-                    )}
-                    {project.project_url && (
-                        <a
-                            href={project.project_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors duration-300"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <FiExternalLink size={16} />
-                            <span>Demo</span>
-                        </a>
-                    )}
                     <span className="ml-auto flex items-center gap-1.5 text-sm text-blue-400 group-hover:text-blue-300 transition-colors duration-300 cursor-pointer">
                         <span>Details</span>
                         <ArrowRightCircle size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
