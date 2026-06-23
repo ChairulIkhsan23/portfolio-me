@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { FaGithub, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import { HiOutlineMail } from 'react-icons/hi';
-import { FiFileText, FiX } from 'react-icons/fi';
+import { FiFileText } from 'react-icons/fi';
 import ShinyText from '@/components/ShinyText';
 import { socialLinks } from '@/constants/socialLinks';
 import { useState } from 'react';
@@ -123,24 +123,16 @@ export default function Hero() {
             {/* MODAL PDF */}
             {showPDF && (
                 <div
-                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+                    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm cursor-pointer"
                     onClick={() => setShowPDF(false)}
                 >
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.95 }}
-                        className="relative w-full max-w-4xl h-[80vh] bg-white rounded-lg overflow-hidden shadow-2xl"
+                        className="relative w-full max-w-4xl h-[80vh] bg-white rounded-lg overflow-hidden shadow-2xl cursor-default"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        {/* Tombol Close */}
-                        <button
-                            onClick={() => setShowPDF(false)}
-                            className="absolute top-4 right-4 z-10 p-2 bg-black/50 hover:bg-black/70 rounded-full text-white transition-all duration-300"
-                        >
-                            <FiX size={24} />
-                        </button>
-
                         {/* PDF Viewer */}
                         <iframe
                             src={`${socialLinks.resume}#toolbar=0`}
