@@ -17,7 +17,7 @@ const navigation = [
 ];
 
 export default function BottomNav() {
-    const sections = ['#home', '#projects', '#', '#certificates', '#contact'];
+    const sections = ['#home', '#projects', '#journey', '#certificates', '#contact'];
     const activeSection = useScrollSpy(sections, 100);
 
     const isActive = (href: string) => {
