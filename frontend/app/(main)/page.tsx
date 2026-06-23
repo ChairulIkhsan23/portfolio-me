@@ -9,9 +9,14 @@ import Journey from '@/components/home/Journey';
 import Certificates from '@/components/home/Certificate';
 import ContactForm from '@/components/contact/ContactForm';
 import { useEffect } from 'react';
+import { useProjectsSWR, useExperiencesSWR, useEducationsSWR, useCertificatesSWR } from '@/hooks';
 
 export default function Home() {
-  // Inject JSON-LD untuk SEO 
+  useProjectsSWR();
+  useExperiencesSWR();
+  useEducationsSWR();
+  useCertificatesSWR();
+
   useEffect(() => {
     const script = document.createElement('script');
     script.type = 'application/ld+json';

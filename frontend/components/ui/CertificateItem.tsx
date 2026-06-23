@@ -20,6 +20,17 @@ export default function CertificateItem({ certificate, index }: CertificateItemP
         handleLoad,
     } = useImageFallback(certificate.image || '');
 
+    // Helper untuk ambil category name
+    const getCategoryName = () => {
+        if (!certificate.category) return 'Certificate';
+        if (typeof certificate.category === 'object') {
+            return certificate.category.name;
+        }
+        return certificate.category;
+    };
+
+    const categoryName = getCategoryName();
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -32,7 +43,6 @@ export default function CertificateItem({ certificate, index }: CertificateItemP
                 {/* Image di atas */}
                 {certificate.image ? (
                     <div className="relative w-full h-48 overflow-hidden bg-gray-800">
-                        {/* Loading Skeleton */}
                         {isLoading && (
                             <div className="absolute inset-0 bg-linear-to-r from-gray-800 via-gray-700 to-gray-800 animate-pulse" />
                         )}
@@ -48,7 +58,6 @@ export default function CertificateItem({ certificate, index }: CertificateItemP
                             onLoad={handleLoad}
                         />
 
-                        {/* Error Indicator */}
                         {hasError && (
                             <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm">
                                 <div className="text-center">
@@ -66,7 +75,7 @@ export default function CertificateItem({ certificate, index }: CertificateItemP
                 {/* Category Badge */}
                 <div className="absolute top-4 left-4 z-10">
                     <span className="text-xs px-3 py-1 rounded-full bg-black/60 backdrop-blur-sm text-white border border-white/20">
-                        {certificate.category_label || certificate.category}
+                        {categoryName}
                     </span>
                 </div>
 
@@ -95,7 +104,7 @@ export default function CertificateItem({ certificate, index }: CertificateItemP
 
                     <p className="text-gray-500 text-xs mb-3">
                         Issued: {certificate.issued_formatted}
-                        {certificate.expiry_date && ` • Expires: ${certificate.expiry_date.split('-')[0]}`}
+                        {certificate.expiry_date && ` • Expires: ${certificate.expiry_formatted || certificate.expiry_date.split('-')[0]}`}
                         {!certificate.expiry_date && certificate.is_valid && ' • Lifetime'}
                     </p>
 

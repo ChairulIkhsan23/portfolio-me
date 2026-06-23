@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins, Geist } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import Providers from './providers';
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -128,7 +129,9 @@ export default function RootLayout({
         <meta name="person:job_title" content="Software Developer & AI/ML Engineer" />
       </head>
       <body className="bg-black text-white antialiased">
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );

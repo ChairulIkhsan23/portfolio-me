@@ -45,7 +45,7 @@ export default function ExperienceItem({ experience, index }: ExperienceItemProp
                     {experience.company_logo && (
                         <div className="relative w-10 h-10 md:w-12 md:h-12 flex-shrink-0">
                             <Image
-                                src={`/storage/${experience.company_logo}`}
+                                src={experience.company_logo}
                                 alt={experience.company}
                                 fill
                                 className="object-contain rounded"
@@ -75,24 +75,6 @@ export default function ExperienceItem({ experience, index }: ExperienceItemProp
                             </li>
                         ))}
                     </ul>
-                )}
-
-                {(experience.technologies_label ?? experience.technologies) && (
-                    <div className="flex flex-wrap gap-2">
-                        {(experience.technologies_label ?? experience.technologies)!.slice(0, 4).map((tech) => (
-                            <span
-                                key={tech}
-                                className="text-xs px-2.5 py-1 rounded-full bg-white/5 text-gray-400 border border-white/10 hover:bg-blue-500/20 hover:text-blue-400 hover:border-blue-500/30 transition-all duration-300"
-                            >
-                                {tech}
-                            </span>
-                        ))}
-                        {(experience.technologies_label ?? experience.technologies)!.length > 4 && (
-                            <span className="text-xs px-2.5 py-1 rounded-full bg-white/5 text-gray-400 border border-white/10">
-                                +{(experience.technologies_label ?? experience.technologies)!.length - 4}
-                            </span>
-                        )}
-                    </div>
                 )}
             </div>
         </motion.div>

@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ArrowRightCircle, Star } from 'lucide-react';
+import { ArrowRightCircle } from 'lucide-react';
 import Image from 'next/image';
 import { Project } from '@/types';
 import { useImageFallback } from '@/hooks/useImageFallback';
@@ -31,15 +31,15 @@ export default function CardProject({ project, index = 0, onClick }: CardProject
         handleLoad,
     } = useImageFallback(project.image || '');
 
-    const formattedCategory = capitalizeWords(project.category);
+    const categoryName = project.category?.name || 'Project';
+    const formattedCategory = capitalizeWords(categoryName);
 
-    const getFormattedTechs = (techs: string[] | undefined): string[] => {
+    const getFormattedTechs = (techs: { id: number; name: string; slug: string }[] | undefined): string[] => {
         if (!techs) return [];
-        return techs.map(tech => capitalizeWords(tech));
+        return techs.map(tech => capitalizeWords(tech.name));
     };
 
-    const rawTechs = project.technologies_label ?? project.technologies;
-    const formattedTechs = getFormattedTechs(rawTechs);
+    const formattedTechs = getFormattedTechs(project.technologies);
 
     return (
         <motion.div
@@ -70,14 +70,8 @@ export default function CardProject({ project, index = 0, onClick }: CardProject
 
                 <div className="absolute top-4 left-4 flex flex-wrap gap-2 z-20">
                     <span className="text-xs px-3 py-1 rounded-full bg-blue-500/80 text-white backdrop-blur-sm border border-white/20">
-                        {formattedCategory || 'Project'}
+                        {formattedCategory}
                     </span>
-                    {project.is_featured && (
-                        <span className="flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-lime-500/80 text-white backdrop-blur-sm border border-white/20">
-                            <Star size={12} className="fill-white" />
-                            <span>Featured</span>
-                        </span>
-                    )}
                 </div>
 
                 {hasError && (

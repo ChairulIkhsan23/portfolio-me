@@ -1,35 +1,31 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useExperiences } from '@/hooks/useExperiences';
-import { useEducations } from '@/hooks/useEducations';
+import { useExperiencesSWR, useEducationsSWR } from '@/hooks';
 import ExperienceItem from '@/components/ui/ExperienceItem';
 import EducationItem from '@/components/ui/EducationItem';
 import { BadgeCheck, GraduationCap, BriefcaseBusiness, School, AlertCircle } from 'lucide-react';
-import { Skeleton } from '@/components/ui/skeleton';
 
-// Skeleton untuk Experience/Education Item
 function JourneyItemSkeleton() {
     return (
         <div className="relative pl-8 pb-8 border-l border-white/10">
             <div className="absolute left-0 top-0 -translate-x-1/2">
-                <Skeleton className="w-4 h-4 rounded-full" />
+                <div className="w-4 h-4 rounded-full bg-white/10 animate-pulse" />
             </div>
             <div className="space-y-3">
-                <Skeleton className="h-5 w-3/4" />
-                <Skeleton className="h-4 w-1/2" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-2/3" />
+                <div className="h-5 w-3/4 bg-white/10 rounded animate-pulse" />
+                <div className="h-4 w-1/2 bg-white/10 rounded animate-pulse" />
+                <div className="h-4 w-full bg-white/10 rounded animate-pulse" />
+                <div className="h-4 w-2/3 bg-white/10 rounded animate-pulse" />
                 <div className="flex gap-2 pt-2">
-                    <Skeleton className="h-6 w-16 rounded-full" />
-                    <Skeleton className="h-6 w-20 rounded-full" />
+                    <div className="h-6 w-16 bg-white/10 rounded-full animate-pulse" />
+                    <div className="h-6 w-20 bg-white/10 rounded-full animate-pulse" />
                 </div>
             </div>
         </div>
     );
 }
 
-// Skeleton untuk satu kolom (list items)
 function ColumnSkeleton({ count = 3 }: { count?: number }) {
     return (
         <div className="space-y-6">
@@ -40,7 +36,6 @@ function ColumnSkeleton({ count = 3 }: { count?: number }) {
     );
 }
 
-// Empty State Component
 function JourneyEmptyState({ type, icon: Icon }: { type: string; icon: React.ElementType }) {
     return (
         <motion.div
@@ -61,39 +56,34 @@ function JourneyEmptyState({ type, icon: Icon }: { type: string; icon: React.Ele
 }
 
 export default function Journey() {
-    const { experiences, loading: expLoading, error: expError } = useExperiences();
-    const { educations, loading: eduLoading, error: eduError } = useEducations();
+    const { experiences, loading: expLoading, error: expError } = useExperiencesSWR();
+    const { educations, loading: eduLoading, error: eduError } = useEducationsSWR();
 
     const isLoading = expLoading || eduLoading;
     const hasError = expError || eduError;
 
-    // Loading state
     if (isLoading) {
         return (
             <section className="py-20">
                 <div className="container mx-auto px-6 md:px-16">
-                    {/* Section Title Skeleton */}
                     <div className="mb-16 text-center">
-                        <Skeleton className="h-10 w-48 mx-auto mb-3" />
-                        <Skeleton className="h-5 w-80 mx-auto" />
+                        <div className="h-10 w-48 bg-white/10 rounded mx-auto mb-3 animate-pulse" />
+                        <div className="h-5 w-80 bg-white/10 rounded mx-auto animate-pulse" />
                     </div>
 
-                    {/* Grid 2 kolom skeleton */}
                     <div className="grid md:grid-cols-2 gap-12 lg:gap-16">
-                        {/* Left Column - Experience */}
                         <div>
                             <div className="flex items-center gap-3 mb-8">
-                                <Skeleton className="w-6 h-6 rounded" />
-                                <Skeleton className="h-7 w-40" />
+                                <div className="w-6 h-6 bg-white/10 rounded animate-pulse" />
+                                <div className="h-7 w-40 bg-white/10 rounded animate-pulse" />
                             </div>
                             <ColumnSkeleton count={3} />
                         </div>
 
-                        {/* Right Column - Education */}
                         <div>
                             <div className="flex items-center gap-3 mb-8">
-                                <Skeleton className="w-6 h-6 rounded" />
-                                <Skeleton className="h-7 w-32" />
+                                <div className="w-6 h-6 bg-white/10 rounded animate-pulse" />
+                                <div className="h-7 w-32 bg-white/10 rounded animate-pulse" />
                             </div>
                             <ColumnSkeleton count={3} />
                         </div>
@@ -103,7 +93,6 @@ export default function Journey() {
         );
     }
 
-    // Error state
     if (hasError) {
         return (
             <section className="py-20">
@@ -132,7 +121,6 @@ export default function Journey() {
     return (
         <section className="py-20">
             <div className="container mx-auto px-6 md:px-16">
-                {/* Section Title */}
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -148,9 +136,7 @@ export default function Journey() {
                     </p>
                 </motion.div>
 
-                {/* Grid 2 kolom */}
                 <div className="grid md:grid-cols-2 gap-12 lg:gap-16">
-                    {/* LEFT COLUMN - Experience */}
                     <motion.div
                         initial={{ opacity: 0, x: -30 }}
                         whileInView={{ opacity: 1, x: 0 }}
@@ -173,7 +159,6 @@ export default function Journey() {
                         </div>
                     </motion.div>
 
-                    {/* RIGHT COLUMN - Education */}
                     <motion.div
                         initial={{ opacity: 0, x: 30 }}
                         whileInView={{ opacity: 1, x: 0 }}

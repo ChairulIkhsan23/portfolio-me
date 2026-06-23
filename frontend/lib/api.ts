@@ -1,7 +1,6 @@
 import { MessageForm } from '@/types';
 import axios from 'axios';
 
-// Hybrid: Prioritaskan environment variable, fallback ke hardcode
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://backend-portfolio.chairulikhsanworks.my.id/api';
 
 const api = axios.create({
@@ -11,41 +10,53 @@ const api = axios.create({
     },
 });
 
-// Projects
-export const getProjects = async () => {
-    const response = await api.get('/projects');
+export const getProjects = async (categoryId?: number) => {
+    const params = new URLSearchParams();
+    if (categoryId) params.append('category_id', String(categoryId));
+
+    const response = await api.get(`/portfolio/projects?${params.toString()}`);
     return response.data.data;
 };
 
 export const getProjectBySlug = async (slug: string) => {
-    const response = await api.get(`/projects/${slug}`);
+    const response = await api.get(`/portfolio/projects/${slug}`);
     return response.data.data;
 };
 
-// Experiences
 export const getExperiences = async () => {
-    const response = await api.get('/experiences');
+    const response = await api.get('/portfolio/experiences');
     return response.data.data;
 };
 
-// Educations
+export const getExperienceById = async (id: number) => {
+    const response = await api.get(`/portfolio/experiences/${id}`);
+    return response.data.data;
+};
+
 export const getEducations = async () => {
-    const response = await api.get('/educations');
+    const response = await api.get('/portfolio/education');
     return response.data.data;
 };
 
-// Certificates
-export const getCertificates = async () => {
-    const response = await api.get('/certificates');
+export const getEducationById = async (id: number) => {
+    const response = await api.get(`/portfolio/education/${id}`);
     return response.data.data;
 };
 
-export const getFeaturedCertificates = async (limit = 6) => {
-    const response = await api.get(`/certificates/featured?limit=${limit}`);
+export const getCertificates = async (categoryId?: number, perPage = 12) => {
+    const params = new URLSearchParams();
+    if (categoryId) params.append('category_id', String(categoryId));
+    params.append('per_page', String(perPage));
+
+    const response = await api.get(`/portfolio/certificates?${params.toString()}`);
+    return response.data;
+};
+
+export const getCertificateById = async (id: number) => {
+    const response = await api.get(`/portfolio/certificates/${id}`);
     return response.data.data;
 };
 
-// Messages
 export const sendMessage = async (data: MessageForm) => {
     const response = await api.post('/messages', data);
     return response.data;
