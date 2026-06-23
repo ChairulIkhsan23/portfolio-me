@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Experience } from '@/types';
-import { BadgeCheck } from 'lucide-react';
+import { BadgeCheck, FileText } from 'lucide-react';
 import Image from 'next/image';
 
 interface ExperienceItemProps {
@@ -75,6 +75,18 @@ export default function ExperienceItem({ experience, index }: ExperienceItemProp
                             </li>
                         ))}
                     </ul>
+                )}
+
+                {experience.drive_link && (
+                    <a
+                        href={experience.drive_link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors mt-2"
+                    >
+                        <FileText size={16} />
+                        <span>View Supporting Document</span>
+                    </a>
                 )}
             </div>
         </motion.div>

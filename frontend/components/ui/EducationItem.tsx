@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { GraduationCap } from 'lucide-react';
+import { GraduationCap, FileText } from 'lucide-react';
 import Image from 'next/image';
 import { Education } from '@/types';
 
@@ -82,6 +82,18 @@ export default function EducationItem({ education, index }: EducationItemProps) 
                             </li>
                         ))}
                     </ul>
+                )}
+
+                {education.drive_link && (
+                    <a
+                        href={education.drive_link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors mt-3 ml-6"
+                    >
+                        <FileText size={16} />
+                        <span>View Supporting Documents</span>
+                    </a>
                 )}
             </div>
         </motion.div>
