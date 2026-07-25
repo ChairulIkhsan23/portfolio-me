@@ -47,10 +47,10 @@ export default function EducationItem({ education, index }: EducationItemProps) 
                         <div className="relative w-10 h-10 md:w-12 md:h-12 flex-shrink-0">
                             <Image
                                 src={education.logo}
-                                alt={`${education.institution} logo`}
+                                alt={education.institution}
                                 fill
-                                className="object-contain rounded-lg bg-white/5"
-                                sizes="48px"
+                                className="object-contain rounded"
+                                unoptimized={true}
                             />
                         </div>
                     )}
