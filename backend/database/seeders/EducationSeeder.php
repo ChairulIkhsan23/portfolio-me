@@ -19,7 +19,11 @@ class EducationSeeder extends Seeder
                 'start_date' => '2018-08-01',
                 'end_date' => '2022-06-30',
                 'is_current' => false,
-                'description' => 'Fokus pada pengembangan web dan mobile. Aktif di organisasi dan lomba coding.',
+                'description' => json_encode([
+                    'Fokus pada pengembangan web dan mobile',
+                    'Aktif di organisasi Himpunan Mahasiswa Informatika',
+                    'Juara 2 Lomba Coding Nasional 2021'
+                ]),
                 'sort_order' => 1,
             ],
             [
@@ -31,7 +35,10 @@ class EducationSeeder extends Seeder
                 'start_date' => '2016-07-01',
                 'end_date' => '2019-05-31',
                 'is_current' => false,
-                'description' => 'Aktif di ekstrakurikuler robotika dan klub programming.',
+                'description' => json_encode([
+                    'Aktif di ekstrakurikuler robotika',
+                    'Mengikuti klub programming dan workshop IT'
+                ]),
                 'sort_order' => 2,
             ],
             [
@@ -43,7 +50,11 @@ class EducationSeeder extends Seeder
                 'start_date' => '2022-07-01',
                 'end_date' => '2022-12-31',
                 'is_current' => false,
-                'description' => 'Program intensif full stack web developer dengan 500+ jam pembelajaran.',
+                'description' => json_encode([
+                    'Program intensif full stack web developer dengan 500+ jam pembelajaran',
+                    'Menyelesaikan 3 project akhir dengan nilai A',
+                    'Mendapatkan sertifikasi dengan predikat Excellent'
+                ]),
                 'sort_order' => 3,
             ],
         ];

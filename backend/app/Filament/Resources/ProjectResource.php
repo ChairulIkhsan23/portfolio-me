@@ -70,16 +70,18 @@ class ProjectResource extends Resource
                             ]),
                     ]),
                 
-                // Section 2: Description & Content
+                // Section 2: Description & Content - YANG DIUBAH
                 Section::make('Description & Content')
                     ->icon('heroicon-o-document-text')
                     ->description('Project description and detailed content')
                     ->schema([
-                        Textarea::make('description')
-                            ->required()
-                            ->rows(4)
-                            ->placeholder('Brief description of the project...')
-                            ->helperText('This will appear in project cards and listings'),
+                        // DESCRIPTION - PAKAI TAGSINPUT (bisa paragraf + point)
+                        Forms\Components\TagsInput::make('description')
+                            ->label('Description (Mix of Paragraph & Bullet Points)')
+                            ->placeholder('Ketik deskripsi atau poin, lalu tekan Enter')
+                            ->separator(',')
+                            ->helperText('Ketik satu poin/deskripsi, tekan Enter. Bisa mix antara paragraf dan bullet points.')
+                            ->columnSpanFull(),
                         
                         Textarea::make('content')
                             ->rows(10)

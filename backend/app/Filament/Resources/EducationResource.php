@@ -8,7 +8,8 @@ use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TagsInput;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
@@ -47,9 +48,17 @@ class EducationResource extends Resource
                                     ->placeholder('e.g., Universitas Indonesia')
                                     ->columnSpanFull(),
                                 
-                                TextInput::make('logo')
-                                    ->maxLength(255)
-                                    ->placeholder('URL or path to institution logo'),
+                        FileUpload::make('logo')
+                            ->label('Institution Logo')
+                            ->image()
+                            ->disk('public')
+                            ->directory('education/logos')
+                            ->imageResizeMode('cover')
+                            ->imageCropAspectRatio('1:1')
+                            ->imageResizeTargetWidth('200')
+                            ->imageResizeTargetHeight('200')
+                            ->acceptedFileTypes(['image/png', 'image/jpeg', 'image/jpg', 'image/webp'])
+                            ->helperText('Upload logo institusi (png, jpg, webp) - ukuran persegi direkomendasikan'),
                             ]),
                     ]),
                 
@@ -104,14 +113,17 @@ class EducationResource extends Resource
                             ]),
                     ]),
                 
-                // Section 4: Description
+                // Section 4: Additional Information - YANG DIUBAH
                 Section::make('Additional Information')
                     ->icon('heroicon-o-document-text')
                     ->description('Any achievements, activities, or notes')
                     ->schema([
-                        Textarea::make('description')
-                            ->rows(4)
-                            ->placeholder('Describe your experience, achievements, or activities during this period')
+                        // GANTI INI: dari Textarea ke TagsInput
+                        TagsInput::make('description')
+                            ->label('Description (Achievements & Activities)')
+                            ->placeholder('Ketik deskripsi atau poin, lalu tekan Enter')
+                            ->separator(',')
+                            ->helperText('Ketik satu poin/prestasi/aktivitas, tekan Enter. Bisa mix antara paragraf dan bullet points.')
                             ->columnSpanFull(),
                     ]),
                 

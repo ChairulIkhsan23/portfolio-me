@@ -8,11 +8,10 @@ use App\Models\Experience;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
@@ -51,9 +50,18 @@ class ExperienceResource extends Resource
                                     ->placeholder('e.g., Google, Microsoft, Startup XYZ')
                                     ->columnSpanFull(),
                                 
-                                TextInput::make('company_logo')
-                                    ->maxLength(255)
-                                    ->placeholder('URL or path to company logo'),
+                        FileUpload::make('company_logo')
+                            ->label('Company Logo')
+                            ->image()
+                            ->disk('public')
+                            ->directory('experiences/logos')
+                            ->imageResizeMode('cover')
+                            ->imageCropAspectRatio('1:1')
+                            ->imageResizeTargetWidth('200')
+                            ->imageResizeTargetHeight('200')
+                            ->acceptedFileTypes(['image/png', 'image/jpeg', 'image/jpg', 'image/webp'])
+                            ->helperText('Upload logo perusahaan (png, jpg, webp) - ukuran persegi direkomendasikan')
+                            ->columnSpanFull(),
                                 
                                 TextInput::make('location')
                                     ->maxLength(255)
@@ -61,7 +69,7 @@ class ExperienceResource extends Resource
                             ]),
                     ]),
                 
-                // Section 2: Position Details
+                // Section 2: Position Details - YANG DIUBAH
                 Section::make('Position Details')
                     ->icon('heroicon-o-user')
                     ->description('Your role and responsibilities')
@@ -74,10 +82,12 @@ class ExperienceResource extends Resource
                                     ->placeholder('e.g., Senior Full Stack Developer, Software Engineer')
                                     ->columnSpanFull(),
                                 
-                                Textarea::make('description')
-                                    ->required()
-                                    ->rows(5)
-                                    ->placeholder('Describe your responsibilities, achievements, and day-to-day tasks...')
+                                // GANTI INI: dari Textarea ke TagsInput
+                                TagsInput::make('description')
+                                    ->label('Description (Responsibilities & Achievements)')
+                                    ->placeholder('Ketik deskripsi atau poin, lalu tekan Enter')
+                                    ->separator(',')
+                                    ->helperText('Ketik satu poin/responsibility, tekan Enter. Bisa mix antara paragraf dan bullet points.')
                                     ->columnSpanFull(),
                             ]),
                     ]),

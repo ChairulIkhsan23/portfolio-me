@@ -14,7 +14,11 @@ class ProjectSeeder extends Seeder
             [
                 'title' => 'Portfolio Website',
                 'slug' => 'portfolio-website',
-                'description' => 'Website portfolio pribadi menggunakan Laravel 12 dan Next.js dengan fitur admin panel Filament.',
+                'description' => json_encode([
+                    'Website portfolio pribadi menggunakan Laravel 12 dan Next.js',
+                    'Dilengkapi admin panel Filament untuk manajemen konten',
+                    'Responsive design dengan Tailwind CSS'
+                ]),
                 'content' => 'Website ini dibuat untuk menampilkan portofolio project, pengalaman kerja, dan sertifikat. Menggunakan Laravel 12 sebagai backend API, Next.js sebagai frontend, dan Filament sebagai admin panel.',
                 'image' => '/images/projects/portfolio.jpg',
                 'images' => json_encode(['/images/projects/portfolio-1.jpg', '/images/projects/portfolio-2.jpg']),
@@ -30,7 +34,11 @@ class ProjectSeeder extends Seeder
             [
                 'title' => 'E-Commerce App',
                 'slug' => 'e-commerce-app',
-                'description' => 'Aplikasi e-commerce modern dengan fitur keranjang belanja, pembayaran, dan manajemen produk.',
+                'description' => json_encode([
+                    'Aplikasi e-commerce modern dengan fitur keranjang belanja',
+                    'Integrasi pembayaran dengan Midtrans',
+                    'Dashboard admin untuk manajemen produk dan订单'
+                ]),
                 'content' => 'Aplikasi ini memiliki fitur lengkap seperti autentikasi user, manajemen produk, keranjang belanja, checkout dengan Midtrans, dan dashboard admin.',
                 'image' => '/images/projects/ecommerce.jpg',
                 'images' => json_encode(['/images/projects/ecommerce-1.jpg', '/images/projects/ecommerce-2.jpg']),
@@ -46,7 +54,11 @@ class ProjectSeeder extends Seeder
             [
                 'title' => 'Mobile POS System',
                 'slug' => 'mobile-pos-system',
-                'description' => 'Aplikasi Point of Sale untuk UMKM berbasis mobile dengan fitur offline mode.',
+                'description' => json_encode([
+                    'Aplikasi Point of Sale untuk UMKM berbasis mobile',
+                    'Mendukung transaksi offline mode',
+                    'Sync data otomatis dan laporan penjualan real-time'
+                ]),
                 'content' => 'Aplikasi POS mobile yang mendukung transaksi offline, sync data otomatis, dan laporan penjualan real-time.',
                 'image' => '/images/projects/pos.jpg',
                 'images' => json_encode(['/images/projects/pos-1.jpg', '/images/projects/pos-2.jpg']),

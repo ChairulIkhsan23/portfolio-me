@@ -43,14 +43,14 @@ export default function EducationItem({ education, index }: EducationItemProps) 
                 </div>
 
                 <div className="flex items-center gap-2 mb-2 ml-6">
-                    {education.logo && (
+{education.logo && (
                         <div className="relative w-10 h-10 md:w-12 md:h-12 flex-shrink-0">
                             <Image
-                                src={`/storage/${education.logo}`}
-                                alt={education.institution}
+                                src={education.logo}
+                                alt={`${education.institution} logo`}
                                 fill
-                                className="object-contain rounded"
-                                unoptimized={true}
+                                className="object-contain rounded-lg bg-white/5"
+                                sizes="48px"
                             />
                         </div>
                     )}

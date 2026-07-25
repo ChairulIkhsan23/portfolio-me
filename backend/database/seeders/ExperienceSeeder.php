@@ -15,7 +15,11 @@ class ExperienceSeeder extends Seeder
                 'position' => 'Senior Full Stack Developer',
                 'location' => 'Jakarta, Indonesia',
                 'company_logo' => '/images/companies/teknologi-inovasi.png',
-                'description' => 'Mengembangkan dan memelihara aplikasi web perusahaan. Bertanggung jawab atas backend API dan frontend React.',
+                'description' => json_encode([
+                    'Mengembangkan dan memelihara aplikasi web perusahaan dengan Laravel dan React',
+                    'Bertanggung jawab atas backend API dan frontend React',
+                    'Memimpin tim developer dalam pengembangan fitur baru'
+                ]),
                 'technologies' => json_encode(['Laravel', 'React', 'MySQL', 'Redis', 'Docker']),
                 'achievements' => json_encode([
                     'Meningkatkan performa API sebesar 40%',
@@ -32,11 +36,15 @@ class ExperienceSeeder extends Seeder
                 'position' => 'Full Stack Developer',
                 'location' => 'Bandung, Indonesia',
                 'company_logo' => '/images/companies/digital-kreatif.png',
-                'description' => 'Membangun aplikasi web untuk klien startup. Fokus pada pengembangan fitur dan optimasi database.',
+                'description' => json_encode([
+                    'Membangun aplikasi web untuk klien startup menggunakan Laravel dan Vue.js',
+                    'Fokus pada pengembangan fitur dan optimasi database PostgreSQL',
+                    'Berkolaborasi dengan tim desain untuk implementasi UI/UX'
+                ]),
                 'technologies' => json_encode(['Laravel', 'Vue.js', 'PostgreSQL', 'Tailwind CSS']),
                 'achievements' => json_encode([
                     'Berhasil menyelesaikan 5+ project tepat waktu',
-                    'Mengimplementasikan real-time notification'
+                    'Mengimplementasikan real-time notification dengan WebSocket'
                 ]),
                 'start_date' => '2021-06-01',
                 'end_date' => '2022-12-31',
@@ -48,7 +56,11 @@ class ExperienceSeeder extends Seeder
                 'position' => 'Freelance Developer',
                 'location' => 'Remote',
                 'company_logo' => null,
-                'description' => 'Mengerjakan berbagai project web untuk klien dari berbagai industri.',
+                'description' => json_encode([
+                    'Mengerjakan berbagai project web untuk klien dari berbagai industri',
+                    'Membangun website company profile, e-commerce, dan aplikasi custom',
+                    'Memberikan maintainance dan support teknis untuk klien'
+                ]),
                 'technologies' => json_encode(['PHP', 'WordPress', 'Laravel', 'Bootstrap', 'jQuery']),
                 'achievements' => json_encode([
                     'Mengerjakan 15+ project untuk 10+ klien',
